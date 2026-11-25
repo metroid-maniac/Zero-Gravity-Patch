@@ -31,8 +31,10 @@ a pad. That is what the patch feeds.
 | Displaced instruction | run at the end of the body, then back to `site+4` |
 
 For each of the four ports whose `PADStatus` error byte is non-zero (no real pad answered),
-the body looks at the same channel's newest `KPADStatus` sample. If its device type is `2`
-(Classic) and its extension error is `0`, it fills the port's `PADStatus`:
+the body looks at the same channel's newest `KPADStatus` sample. If its extension error is `0`
+and its device type is `2` (Classic) or `1` (Nunchuk), it fills the port's `PADStatus`:
+
+Classic Controller (`dev_type == 2`):
 
 | `KPADStatus` (offset in a `0x84` sample) | `PADStatus` |
 | --- | --- |
@@ -41,8 +43,21 @@ the body looks at the same channel's newest `KPADStatus` sample. If its device t
 | `+0x74/+0x78` right stick floats | C-stick X/Y, x 100 |
 | `+0x7C/+0x80` L/R trigger floats (0..1) | analog L/R, x 200 |
 
+Wii Remote + Nunchuk (`dev_type == 1`):
+
+| `KPADStatus` (offset in a `0x84` sample) | `PADStatus` |
+| --- | --- |
+| `+0x00` Wii Remote + Nunchuk hold bits | button bits (table below) |
+| `+0x60/+0x64` Nunchuk stick floats (-1..1) | stick X/Y, x 100 |
+| Z held (`0x2000` in `+0x00`) | analog L = 192 (0 when released), digital L (`0x0040`) |
+
+For Nunchuk (`dev_type == 1`), the hook also clears non-HOME button bits and analog/motion
+fields in that channel's Wii Remote input slot (`r23 + 0x1C0 + chan * 0x70`, populated earlier
+in the same frame by `FUN_800273c4`) so Wii Remote buttons and motion do not double-fire
+alongside the GameCube slot.
+
 and clears the error byte. A port with a real pad (error `0`) is left alone, so GameCube
-pads and Classic Controllers can be mixed.
+pads, Classic Controllers, and Wii Remote + Nunchuk can be mixed.
 
 The stick scale is 100. Measured in the game's slot structure: a full-deflection GameCube pad
 gives 100, a `PADStatus` byte of 80 gave only 90 (Classic steering 10 % short), and a byte of
@@ -60,6 +75,17 @@ Button bits:
 | L `0x2000` / R `0x0200` | | L `0x0040` / R `0x0020` |
 | ZL `0x0080` / ZR `0x0004` | | Z `0x0010`, and L `0x0040` / R `0x0020` (the game ignores Z, so ZL/ZR also act as L/R) |
 | Up `0x0001` Left `0x0002` Down `0x4000` Right `0x8000` | | Up `0x0008` Left `0x0001` Down `0x0004` Right `0x0002` |
+
+Wii Remote + Nunchuk button bits:
+
+| Wii Remote + Nunchuk (`hold` at `+0x00`) | → | GameCube (`PADStatus.button`) |
+| --- | --- | --- |
+| A `0x0800` | | A `0x0100` |
+| B `0x0400` | | B `0x0200` |
+| D-pad Down `0x0004` | | X `0x0400` |
+| C `0x4000` | | Y `0x0800` |
+| + `0x0010` | | Start `0x1000` |
+| Z `0x2000` | | L `0x0040` |
 
 ## Why it is safe
 

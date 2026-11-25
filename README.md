@@ -1,8 +1,8 @@
 # Zero Gravity Patch
 
-Play **Sonic Riders: Zero Gravity** (Wii) with a **Classic Controller** — and, for
-reference, with the **GameCube controller** the game already supports. Works with
-the USA (`RS9E8P`), European (`RS9P8P`) and Japanese (`RS9J8P`, *Sonic Riders:
+Play **Sonic Riders: Zero Gravity** (Wii) with a **Classic Controller** or **Wii Remote +
+Nunchuk** — and, for reference, with the **GameCube controller** the game already supports.
+Works with the USA (`RS9E8P`), European (`RS9P8P`) and Japanese (`RS9J8P`, *Sonic Riders:
 Shooting Star Story*) releases.
 
 The patch is applied to your own copy of the game: run the patcher on a clean `.wbfs`
@@ -36,26 +36,27 @@ way they do with the real thing. A real GameCube pad in a port is never overridd
 
 ## Controls
 
-The Classic Controller acts as a GameCube controller. In the game, Classic Controller
-players use the same layout as **Options → Control Settings → Nintendo GameCube
+Both the Classic Controller and Wii Remote + Nunchuk act as a GameCube controller. In the
+game, they use the same layout as **Options → Control Settings → Nintendo GameCube
 Controller**.
 
-| Classic Controller | GameCube controller |
-| --- | --- |
-| Left stick | Control stick |
-| Right stick | C-stick |
-| A / B / X / Y | A / B / X / Y |
-| + | Start |
-| L / R (click) | L / R |
-| ZL / ZR | L / R (and Z, which the game does not use) |
-| D-pad | D-pad |
+| Classic Controller | Wii Remote + Nunchuk | GameCube controller |
+| --- | --- | --- |
+| Left stick | Analog stick | Control stick |
+| Right stick | — | C-stick |
+| A / B | A / B | A / B |
+| X / Y | D-pad Down / C | X / Y |
+| + | + | Start |
+| L / R (click) | Z | L / R |
+| ZL / ZR | — | L / R (and Z, which the game does not use) |
+| D-pad | — | D-pad |
 
 HOME is left to the game and the Wii's HOME Menu.
 
 - A second player joins at the player-entry screen by pressing A on their controller (tested
   with two Classic Controllers in Dolphin; players 3 and 4 are untested).
-- Classic Controller *N* is Wii Remote channel *N*, and drives the same player as
-  GameCube port *N*.
+- Wii Remote channel *N* (with a Classic Controller or Nunchuk attached) drives the same
+  player as GameCube port *N*.
 
 ## Installing
 
